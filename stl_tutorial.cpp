@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include <sys/resource.h>
 
 using namespace std;
 
@@ -104,12 +105,30 @@ void map_tutorial(){
     cout << "Max size of map: " << m.max_size() << endl;
 }
 
+void printPeakMemoryUsage() {
+    struct rusage usage;
+    getrusage(RUSAGE_SELF, &usage);  // Get resource usage of the calling process
+    std::cout << "Peak memory usage: " << usage.ru_maxrss << " KB" << std::endl;
+}
+
+void emulateMemoryLeak() {
+    printPeakMemoryUsage();
+   vector<int> dummyMemory(1000000000, 1);
+
+    for (int i = 0; i < 100000000; i++)
+    {
+        dummyMemory[i] = i+1;
+    }
+    printPeakMemoryUsage();
+}
+
 
 int main(){
     vector_tutorial();
     list_tutorial();
     vector_vs_list();
     map_tutorial();
+    emulateMemoryLeak();
 
     return 0;
 }
